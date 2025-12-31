@@ -21,9 +21,14 @@
   window.scrollTo(0, 0);
 })();
 
-// 🎉 NEW YEAR COUNTDOWN (LOCAL TIME)
+/* 🎉 NEW YEAR TARGET — SAFE ACROSS REFRESH & TIMEZONES */
 const now = new Date();
-const newYearTime = new Date(now.getFullYear() + 1, 0, 1, 0, 0, 0).getTime();
+const thisYearMidnight = new Date(now.getFullYear(), 0, 1, 0, 0, 0).getTime();
+
+// ✅ If we're already past Jan 1 midnight, treat it as unlocked state
+const newYearTime = now.getTime() < thisYearMidnight
+  ? thisYearMidnight
+  : now.getTime();
 
 const countdownEl = document.getElementById("countdown");
 const unlockBtn = document.getElementById("unlock-btn");
@@ -36,12 +41,11 @@ const musicToggle = document.querySelector(".music-toggle");
 
 let isUnlocked = false;
 
-/* COUNTDOWN */
-const timer = setInterval(() => {
+/* COUNTDOWN — REFRESH SAFE AFTER MIDNIGHT */
+(function startCountdown() {
   const diff = newYearTime - Date.now();
 
   if (diff <= 0) {
-    clearInterval(timer);
     countdownEl.innerText = "00:00:00";
     lockText.innerText = "It’s midnight!";
     lockHint.innerText = "Tap when you’re ready ✨";
@@ -49,13 +53,26 @@ const timer = setInterval(() => {
     return;
   }
 
-  const totalSeconds = Math.floor(diff / 1000);
-  const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, "0");
-  const mins = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, "0");
-  const secs = String(totalSeconds % 60).padStart(2, "0");
+  const timer = setInterval(() => {
+    const diff = newYearTime - Date.now();
 
-  countdownEl.innerText = `${hours}:${mins}:${secs}`;
-}, 1000);
+    if (diff <= 0) {
+      clearInterval(timer);
+      countdownEl.innerText = "00:00:00";
+      lockText.innerText = "It’s midnight!";
+      lockHint.innerText = "Tap when you’re ready ✨";
+      unlockBtn.classList.remove("hidden");
+      return;
+    }
+
+    const totalSeconds = Math.floor(diff / 1000);
+    const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, "0");
+    const mins = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, "0");
+    const secs = String(totalSeconds % 60).padStart(2, "0");
+
+    countdownEl.innerText = `${hours}:${mins}:${secs}`;
+  }, 1000);
+})();
 
 /* FADE IN MUSIC */
 function fadeInMusic(duration = 3000) {
@@ -81,8 +98,8 @@ function unlockMoment() {
 
   mainContent.style.display = "flex";
   mainContent.classList.remove("hidden");
-  mainContent.classList.add("unlocked"); // triggers fade-in
-  document.body.classList.remove("locked"); // allow scrolling
+  mainContent.classList.add("unlocked");
+  document.body.classList.remove("locked");
 
   setTimeout(() => {
     mainContent.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -94,14 +111,12 @@ function unlockMoment() {
     sparkles.style.animation = "sparkle 2s ease-out";
   }
 
-  // 🎆 start fireworks
   fireworksActive = true;
   animateFireworks();
 
   fadeInMusic();
   musicToggle.classList.remove("hidden");
 
-  // optional subtle parallax
   window.addEventListener("deviceorientation", e => {
     const x = e.gamma || 0;
     const y = e.beta || 0;
@@ -119,6 +134,7 @@ function toggleMusic() {
     musicToggle.classList.remove("playing");
   }
 }
+
 
 /* MODALS */
 function showMessage(type) {
