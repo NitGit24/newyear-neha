@@ -1,0 +1,577 @@
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* BODY BACKGROUND EFFECTS */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255,255,255,0.05), transparent 40%),
+    radial-gradient(circle at 80% 30%, rgba(255,255,255,0.04), transparent 45%),
+    radial-gradient(circle at 50% 80%, rgba(255,255,255,0.03), transparent 50%);
+  animation: floatGlow 18s ease-in-out infinite alternate;
+  z-index: -1;
+}
+
+@keyframes floatGlow {
+  from { transform: translateY(0); }
+  to { transform: translateY(-18px); }
+}
+
+/* 🌙 Alive but Calm Background Motion */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+
+  background: radial-gradient(
+      circle at 20% 30%,
+      rgba(255, 255, 255, 0.04),
+      transparent 40%
+    ),
+    radial-gradient(
+      circle at 80% 70%,
+      rgba(255, 255, 255, 0.03),
+      transparent 45%
+    ),
+    linear-gradient(
+      120deg,
+      #0b0f1a,
+      #10162a,
+      #0b0f1a
+    );
+
+  background-size: 200% 200%;
+  animation: slowDrift 20s ease-in-out infinite;
+
+  pointer-events: none;
+  will-change: background-position;
+}
+
+/* Extra depth layer (very subtle) */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.03),
+    rgba(0, 0, 0, 0.15)
+  );
+
+  pointer-events: none;
+}
+
+
+body {
+  font-family: 'Inter', sans-serif;
+  color: #fff;
+  min-height: 100svh;
+  background:
+    radial-gradient(circle at top, rgba(255,255,255,0.08), transparent 40%),
+    linear-gradient(135deg, #0b0b12, #1b1b2a);
+  overflow-x: hidden;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle, transparent 60%, rgba(0,0,0,0.5) 100%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* BODY LOCKED SCROLL PREVENTION */
+body.locked {
+  overflow: hidden !important;
+  touch-action: none;
+}
+
+/* UTIL */
+.hidden { display: none; }
+
+/* FIXED CENTERING (iOS SAFE) */
+.center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100svh;
+}
+
+/* FADE */
+.fade-in {
+  animation: fadeIn 1.5s ease forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* GLASS */
+.glass {
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(14px);
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,0.12);
+  box-shadow: 0 14px 36px rgba(0,0,0,0.45);
+  transition: transform 0.25s ease;
+}
+.mini-card:hover { transform: translateY(-3px); }
+
+/* MUSIC TOGGLE */
+.music-toggle {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  font-size: 1.1rem;
+  opacity: 0.65;
+  cursor: pointer;
+  z-index: 200;
+  transition: opacity 0.3s ease;
+}
+
+.music-toggle:hover { opacity: 1; }
+
+.music-toggle.playing {
+  animation: pulseMusic 2s ease-in-out infinite;
+}
+
+@keyframes pulseMusic {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
+}
+
+/* LOCK SCREEN */
+.card {
+  padding: 30px 26px;
+  text-align: center;
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.card h1 {
+  font-family: 'DM Serif Display', serif;
+  margin-bottom: 8px;
+}
+
+#lock-text {
+  margin-bottom: 6px;
+}
+
+#countdown {
+  margin-top: 14px;
+  font-size: 1.2rem;
+  letter-spacing: 1px;
+  line-height: 1;
+}
+
+.hint {
+  margin-top: 12px;
+  font-size: 0.85rem;
+  opacity: 0.75;
+  text-align: center;
+}
+
+.unlock-btn {
+  margin-top: 18px;
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.9);
+  font-size: 0.9rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.unlock-btn::after {
+  content: '';
+  display: block;
+  width: 36px;
+  height: 1px;
+  background: rgba(255,255,255,0.4);
+  margin: 8px auto 0;
+}
+
+.unlock-btn:active {
+  transform: scale(0.96);
+}
+
+/* MAIN CONTENT */
+#main-content {
+  min-height: 100dvh; /* mobile-safe */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 24px 18px 48px;
+
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+#main-content.unlocked {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.9rem;
+  letter-spacing: 0.4px;
+  margin-top: 0;
+}
+
+.subtitle {
+  font-size: 0.95rem;
+  opacity: 0.8;
+  max-width: 340px;
+  margin: 10px auto 28px;
+  letter-spacing: 0.2px;
+}
+
+/* CARDS */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  max-width: 360px;
+  margin: 0 auto;
+}
+
+.mini-card {
+  padding: 18px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.mini-card span {
+  font-size: 0.85rem;
+  opacity: 0.85;
+  line-height: 1.4;
+}
+
+.mini-card:active {
+  transform: scale(0.97);
+}
+
+.video-card {
+  grid-column: 1 / -1;
+  max-width: 220px;
+  margin: 8px auto;
+}
+
+/* MODAL */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 100;
+}
+
+.modal.hidden { display: none; }
+
+.modal-content {
+  width: 100%;
+  max-width: 420px;
+  padding: 22px;
+  position: relative;
+}
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  font-size: 1.4rem;
+  cursor: pointer;
+  opacity: 0.7;
+}
+
+/* GALLERY */
+.memory-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.gallery {
+  display: flex;
+  gap: 14px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding: 12px 6px;
+  width: 100%;
+}
+
+.gallery img {
+  width: 220px;
+  border-radius: 18px;
+  flex-shrink: 0;
+  scroll-snap-align: center;
+  box-shadow: 0 16px 34px rgba(0,0,0,0.45);
+}
+
+.gallery::-webkit-scrollbar { display: none; }
+
+.swipe-hint {
+  margin-top: 6px;
+  font-size: 0.75rem;
+  opacity: 0.55;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.4; }
+  50% { opacity: 0.7; }
+  100% { opacity: 0.4; }
+}
+
+.memory-caption {
+  margin-top: 12px;
+  font-size: 0.85rem;
+  opacity: 0.85;
+  max-width: 260px;
+  text-align: center;
+}
+
+/* VIDEO */
+.video-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.video-wrapper video {
+  width: 180px;
+  max-width: 85%;
+  aspect-ratio: 9 / 16;
+  border-radius: 18px;
+  box-shadow: 0 16px 32px rgba(0,0,0,0.45);
+}
+
+.video-caption {
+  margin-top: 10px;
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
+/* TEXT SPACING FIX */
+p, span {
+  letter-spacing: normal;
+  word-spacing: normal;
+  line-height: 1.5;
+}
+
+/* EMOJI FONT */
+body, .mini-card, .cards, .music-toggle, .modal-content, .subtitle, .title, span, p {
+  font-family: 'Inter', 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;
+}
+
+/* SPARKLES */
+#sparkles {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(circle, rgba(255,255,255,0.7) 1px, transparent 1px);
+  background-size: 80px 80px;
+  opacity: 0;
+}
+
+@keyframes sparkle {
+  0% { opacity: 0; }
+  30% { opacity: 0.4; }
+  100% { opacity: 0; }
+}
+
+
+/* 🎆 FIREWORKS BACKGROUND */
+#fireworks-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: -2;
+}
+
+/* Extra depth glow */
+body::before {
+  filter: saturate(1.2) contrast(1.05);
+}
+
+
+@keyframes slowDrift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+
+@keyframes auroraFloat {
+  0% {
+    transform: translate(-2%, -2%) scale(1);
+  }
+  50% {
+    transform: translate(2%, 1%) scale(1.05);
+  }
+  100% {
+    transform: translate(-1%, 2%) scale(1);
+  }
+}
+
+
+/* ================================
+   ✨ Card Breathing Micro-Interaction
+   ================================ */
+
+/* Base smoothness */
+.mini-card {
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.35s ease,
+    background 0.35s ease;
+}
+
+/* Hover (desktop / subtle preview) */
+.mini-card:hover {
+  transform: translateY(-4px) scale(1.015);
+  box-shadow:
+    0 18px 40px rgba(0,0,0,0.45),
+    inset 0 0 0 1px rgba(255,255,255,0.14);
+}
+
+/* Active touch (iPhone — THIS is the magic) */
+.mini-card:active {
+  transform: translateY(-2px) scale(1.02);
+  background: rgba(255,255,255,0.12);
+  box-shadow:
+    0 22px 50px rgba(0,0,0,0.5),
+    0 0 18px rgba(255,255,255,0.25);
+}
+
+/* Soft glow fade-back */
+.mini-card {
+  will-change: transform;
+}
+
+
+/* ================================
+   ✨ Card Breathing (iOS FIXED)
+   ================================ */
+
+/* Ensure our interaction always wins */
+.cards .mini-card {
+  transition:
+    transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.35s ease,
+    background-color 0.35s ease;
+}
+
+/* Desktop / hover preview */
+.cards .mini-card:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow:
+    0 18px 40px rgba(0,0,0,0.45),
+    inset 0 0 0 1px rgba(255,255,255,0.15);
+}
+
+/* iPhone touch — NOTICEABLE but elegant */
+.cards .mini-card:active {
+  transform: translateY(-6px) scale(1.045);
+  background-color: rgba(255,255,255,0.14);
+  box-shadow:
+    0 26px 60px rgba(0,0,0,0.55),
+    0 0 22px rgba(255,255,255,0.28);
+}
+
+/* Prevent Safari jitter */
+.cards .mini-card {
+  -webkit-tap-highlight-color: transparent;
+  will-change: transform;
+}
+
+
+/* ================================
+   🌟 Unlock Moment – Emotional Peak
+   ================================ */
+
+/* Fullscreen glow overlay */
+.unlock-glow {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(
+    circle at center,
+    rgba(255,255,255,0.35) 0%,
+    rgba(255,255,255,0.15) 25%,
+    rgba(0,0,0,0) 60%
+  );
+  opacity: 0;
+  pointer-events: none;
+  z-index: 9999;
+  transition: opacity 1.2s ease;
+}
+
+/* Glow active */
+.unlock-glow.active {
+  opacity: 1;
+}
+
+/* Main content enters softly */
+.main-content {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 1.2s ease,
+    transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* When unlocked */
+.main-content.reveal {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Text feels gentler */
+.main-content h1,
+.main-content p {
+  transition: opacity 1.4s ease, transform 1.4s ease;
+}
+
+/* Prevent iOS flicker */
+.unlock-glow,
+.main-content {
+  will-change: opacity, transform;
+}
+
+

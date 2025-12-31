@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Happy New Year ✨</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body class="locked">
+
+  <div class="unlock-glow" id="unlockGlow"></div>
+
+  <!-- 🎆 FIREWORKS CANVAS (MUST BE FIRST) -->
+  <canvas id="fireworks-canvas"></canvas>
+
+  <!-- SPARKLES -->
+  <div id="sparkles"></div>
+
+  <!-- BACKGROUND MUSIC -->
+  <audio id="bg-music" loop preload="auto">
+    <source src="audio/audio.mp3" type="audio/mp3">
+  </audio>
+
+  <!-- MUSIC TOGGLE -->
+  <div class="music-toggle hidden" onclick="toggleMusic()">🎧</div>
+
+  <!-- LOCK SCREEN -->
+  <div id="lock-screen" class="center fade-in">
+    <div class="glass card">
+      <h1>Hiiii!</h1>
+      <p id="lock-text">Ayeee this isn’t meant to be opened yet👀</p>
+      <div id="countdown">00:00</div>
+
+      <button id="unlock-btn" class="unlock-btn hidden" onclick="unlockMoment()">
+        Unlock ✨
+      </button>
+
+      <span class="hint" id="lock-hint">
+        Come back when the year changes ✨
+      </span>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div id="main-content" class="hidden fade-in">
+    <h1 class="title">Happyyy New Year Nehaaa 💃✨</h1>
+    <p class="subtitle">
+      I just wanted you to start this year with something small and gentle
+    </p>
+
+    <div class="cards">
+      <div class="glass mini-card" onclick="showMessage('smile')">🧸<span>Tap if you smiled or almost did</span></div>
+      <div class="glass mini-card" onclick="showMessage('gallery')">📸<span>Unforgettable moments</span></div>
+      <div class="glass mini-card video-card" onclick="showMessage('video')">🎥<span>Can’t wait for more like this</span></div>
+      <div class="glass mini-card" onclick="showMessage('note')">💌<span>Virtual note</span></div>
+      <div class="glass mini-card" onclick="showMessage('wish')">🫶<span>Tiny wish</span></div>
+    </div>
+  </div>
+
+  <!-- MODAL -->
+  <div id="modal" class="modal hidden" onclick="closeModal()">
+    <div class="glass modal-content" onclick="event.stopPropagation()">
+      <span class="close" onclick="closeModal()">×</span>
+      <div id="modal-body"></div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
